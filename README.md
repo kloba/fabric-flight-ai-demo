@@ -1,4 +1,3 @@
-
 ## Flight Delay Prediction Lab Guide (Microsoft Fabric)
 
 This guide provides step-by-step instructions on using Copilot and other AI tools within Microsoft Fabric to build an end-to-end flight delay prediction solution. Visitors can follow these instructions to learn how to effectively leverage AI capabilities in Microsoft Fabric.
@@ -8,14 +7,16 @@ This guide provides step-by-step instructions on using Copilot and other AI tool
 ---
 
 ## Step 1: Create Lakehouse
+
 - Go to your workspace.
 - Click **+ New > Lakehouse**.
-- Name it following naming convention: `<prefix>-flightdelay-lakehouse` (e.g., `demo-flightdelay-lakehouse`) to ensure consistency and clarity.
+- Name it following naming convention: `<prefix>-flightdelay-lakehouse` (e.g., `demo-flightdelay-lakehouse`).
 - Click **Create**.
 
 ---
 
 ## Step 2: Upload CSV to Lakehouse
+
 - Download the dataset from Kaggle: [Flight Delay and Cancellation Dataset (2019–2023)](https://www.kaggle.com/datasets/patrickzel/flight-delay-and-cancellation-dataset-2019-2023)
 - Go to your Lakehouse > **Files** > Upload the CSV file.
 - Name the file `flights_sample_3m.csv`.
@@ -25,47 +26,58 @@ This guide provides step-by-step instructions on using Copilot and other AI tool
 ## Step 3: Dataflow Gen 2 – Clean & Transform
 
 ### Create Dataflow:
+
 - Go to workspace > **+ New > Dataflow Gen2**
-- Name it: `dfg2-flightdelay-clean`
+- Name it: `dfg2-flightdelay-prep`
 
 ### Step-by-step using Copilot:
 
 1. **Get data from Lakehouse file**:
+
 ```plaintext
 Load the CSV file from Lakehouse named `flights_sample_3m.csv`
 ```
 
 2. **Remove null ARR_DELAY rows**:
+
+This step demonstrates how Copilot can be used to clean data before analysis — it is an example of what’s possible when preparing datasets for ML workflows in Fabric.
+
 ```plaintext
 Remove all rows where the value in the column `ARR_DELAY` is null.
 ```
 
 3. **Create column `IS_DELAYED`**:
+
 ```plaintext
 Create a new column `IS_DELAYED`.
 Set its value to 1 if `ARR_DELAY` > 15, otherwise 0.
 ```
 
 4. **Create column `DEP_HOUR`**:
+
 ```plaintext
 Create a column `DEP_HOUR` by extracting hour from `CRS_DEP_TIME` (e.g. 1530 → 15).
 ```
 
 5. **Create column `FL_DAYOFWEEK`**:
+
 ```plaintext
 Extract day of the week from `FL_DATE` and store in `FL_DAYOFWEEK`. Monday = 1.
 ```
 
 6. **Create column `FL_MONTH`**:
+
 ```plaintext
 Extract month from `FL_DATE` and store in `FL_MONTH`. Use Date.Month([FL_DATE]).
 ```
 
 ### Save Output:
+
 - Destination: **Warehouse**
 
 The Warehouse is chosen for storing processed data to facilitate efficient data retrieval and seamless integration with Power BI for analytics and reporting purposes.
-- Table name: `whs-flightdelay-features`
+
+- Table name: `flightdelay-features`
 - Click **Run** and **Save**
 
 ---
@@ -73,18 +85,25 @@ The Warehouse is chosen for storing processed data to facilitate efficient data 
 ## Step 4: Data Agent (AI Skills)
 
 ### Create Agent:
+
 - Go to workspace > **+ New > Data Agent**
 - Name: `agent-flightdelay-qna`
-- Add data source: the Lakehouse or Warehouse table `whs-flightdelay-features`
+- Add data source: the Lakehouse or Warehouse table `flightdelay-features`
 - Add instructions (optional) and save.
 
 ### Example Queries to Try:
+
+**Simple Queries:**
+
 - "What percentage of flights were delayed?"
 - "Which hour of the day has the highest number of delays?"
 - "How often do flights get delayed on each day of the week?"
 - "Show me the top 5 airports with the most delays."
 - "Which airlines have the highest average arrival delay?"
 - "What is the monthly trend of delayed flights?"
+
+**More Complex Queries:**
+
 - "Compare delay rates between weekdays and weekends."
 - "Are longer flights more likely to be delayed?"
 - "What is the most common reason for delays among delayed flights?"
@@ -94,28 +113,37 @@ The Warehouse is chosen for storing processed data to facilitate efficient data 
 ## Step 5: Notebooks – AI Modeling
 
 ### Create Notebook:
+
 - Go to **+ New > Notebook**
 - Name it: `nb-flightdelay-model`
 
 ### Prompt 1 – Load and Prepare Data
+
 ```plaintext
-Load the `whs-flightdelay-features` table into a Spark DataFrame.
+Load the `flightdelay-features` table into a Spark DataFrame.
 Prepare the data for binary classification on `IS_DELAYED`.
 Apply cleaning and encoding automatically.
 ```
 
 ### Prompt 2 – Train Model
+
 ```plaintext
 Train a binary classification model to predict `IS_DELAYED`.
 Split into train/test sets, fit the model, and evaluate its performance.
 ```
 
 ### Prompt 3 – Visualize Results
+
+During this step, you will discover which features most influence flight delays. For example, in the test scenario, the hour of departure (`DEP_HOUR`) had the strongest predictive power — flights later in the day are generally more prone to delays. In contrast, features like distance or specific origin/destination airports had much less influence.
+
+This helps demonstrate how machine learning can uncover non-obvious patterns in flight data and guide operational improvements or forecasting strategies.
+
 ```plaintext
 Show feature importance (bar chart), a confusion matrix (heatmap), and delay rate by `DEP_HOUR` (line chart).
 ```
 
 ### Prompt 4 – Predict New Flight
+
 ```plaintext
 Create a DataFrame with a flight:
 - DEP_HOUR = 18
@@ -138,20 +166,35 @@ Apply preprocessing, predict `IS_DELAYED`, and print:
 ## Step 6: Power BI – Dashboard
 
 ### Create Semantic Model:
-- From the Warehouse table `whs-flightdelay-features`, create a semantic model
+
+- From the Warehouse table `flightdelay-features`, create a semantic model
 - Name it: `sm-flightdelay-prediction`
 
-The semantic model provides an intuitive, business-friendly layer on top of your data, enabling powerful and interactive analytics within Power BI. It simplifies data structures, enhances query performance, and allows end-users to easily create insightful reports and dashboards.
+The semantic model provides a structured layer over your data to simplify building Power BI reports. It helps streamline data access, organize fields for analysis, and enable self-service reporting experiences.
+
 - Use Direct Lake for optimal performance
 
 ### Auto-Create Report:
-- In the Fabric workspace, locate the **default Power BI semantic model**
+
+- In the Fabric workspace, locate the **Power BI semantic model `sm-flightdelay-prediction`**
 - Click on the **More menu (…)** next to the model
-- Select **Create report**
-- A blank Power BI canvas opens for editing the report using this semantic model
-- Add visuals as needed (delay rate, airlines, airports, etc.)
-- Click **Save**, and the report will be saved to the same workspace if you have write access
-- If you don’t have permissions, the report will be saved to **My Workspace**
+- Select **Auto-create report** — this automatically generates a suggested Power BI report with visuals based on your data model
+- You can edit the layout or keep the default structure
+- Click **Save** — your report will be saved in the same workspace if you have write access, or in **My Workspace** otherwise
+
+---
+
+### What you can learn from this lab
+
+- How to clean and enrich flight data using Dataflow Gen2 and Copilot.
+- How to build a binary classification model using Copilot in Notebooks.
+- How to identify the most important factors influencing flight delays. For example, in this scenario, departure hour (`DEP_HOUR`) had the strongest impact on delays, while other features like distance or route have minimal influence.
+- How to ask natural language questions to your dataset using Data Agent.
+- How to auto-generate a Power BI report in one click using a semantic model.
+
+All these steps can be conducted without writing a single line of code — this lab shows how you can use Copilot to streamline your analytical work and boost productivity.
+
+This lab showcases how Microsoft Fabric Copilot helps reduce friction across the full data-to-insight workflow.
 
 ---
 
