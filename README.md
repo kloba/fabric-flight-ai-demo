@@ -1,3 +1,4 @@
+
 ## Flight Delay Prediction Lab Guide (Microsoft Fabric)
 
 This guide provides step-by-step instructions on using Copilot and other AI tools within Microsoft Fabric to build an end-to-end flight delay prediction solution. Visitors can follow these instructions to learn how to effectively leverage AI capabilities in Microsoft Fabric.
@@ -195,6 +196,26 @@ The semantic model provides a structured layer over your data to simplify buildi
 All these steps can be conducted without writing a single line of code — this lab shows how you can use Copilot to streamline your analytical work and boost productivity.
 
 This lab showcases how Microsoft Fabric Copilot helps reduce friction across the full data-to-insight workflow.
+
+---
+
+### 🛠️ To-do
+
+**Notebook & Automation:**
+
+- Use the [Notebook Public API](https://learn.microsoft.com/en-us/fabric/data-engineering/notebook-public-api) to trigger this lab notebook programmatically as a REST endpoint.
+
+**Semantic Model:**
+
+- Use Copilot during semantic model creation to generate meaningful field names, relationships, and descriptions. [Learn more](https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-evaluate-data)
+
+**Power BI Copilot:**
+
+- Extend the Power BI Copilot experience using features described [here](https://learn.microsoft.com/en-us/power-bi/create-reports/copilot-introduction), such as:
+  - Generating summary text in natural language.
+  - Automatically suggesting new visuals based on your questions.
+  - Using smart narrative to describe patterns or anomalies.
+  - Building new pages with AI-driven insights.
 
 ---
 
