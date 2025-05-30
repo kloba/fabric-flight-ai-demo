@@ -73,6 +73,38 @@
             border-radius: 6px;
             padding: 1.25rem;
             font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
+            position: relative;
+            overflow-x: auto;
+        }
+
+        .code-container {
+            position: relative;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--fabric-primary);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .copy-btn:hover {
+            opacity: 1;
+            background: var(--fabric-primary-dark);
+            transform: scale(1.05);
+        }
+
+        .copy-btn.copied {
+            background: var(--fabric-success);
         }
 
         code {
@@ -192,6 +224,106 @@
             font-weight: bold;
             margin-right: 0.5rem;
         }
+
+        /* Responsive design for small screens (400px and below) */
+        @media (max-width: 400px) {
+            .container {
+                padding: 0 10px;
+            }
+
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+
+            .navbar-nav {
+                text-align: center;
+            }
+
+            .content {
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+
+            h1 {
+                font-size: 1.5rem;
+                line-height: 1.3;
+            }
+
+            h2 {
+                font-size: 1.3rem;
+                margin-top: 1.5rem;
+                padding-left: 0.75rem;
+            }
+
+            h2::before {
+                width: 3px;
+            }
+
+            h3 {
+                font-size: 1.1rem;
+            }
+
+            img {
+                margin: 1rem 0;
+                border-radius: 6px;
+            }
+
+            pre {
+                padding: 1rem;
+                font-size: 0.85rem;
+                margin: 1rem 0;
+            }
+
+            .copy-btn {
+                top: 0.25rem;
+                right: 0.25rem;
+                padding: 0.2rem 0.4rem;
+                font-size: 0.7rem;
+            }
+
+            code {
+                font-size: 0.85rem;
+                padding: 0.15rem 0.4rem;
+                word-break: break-word;
+            }
+
+            .footer {
+                padding: 1.5rem 0;
+            }
+
+            .step-section {
+                margin-bottom: 2rem;
+                padding-bottom: 1.5rem;
+            }
+
+            ul, ol {
+                padding-left: 1.2rem;
+            }
+
+            blockquote {
+                margin: 1rem 0;
+                padding: 0.75rem 1rem;
+            }
+        }
+
+        /* Extra responsive tweaks for very small screens */
+        @media (max-width: 350px) {
+            .navbar-brand {
+                font-size: 1rem;
+            }
+
+            h1 {
+                font-size: 1.3rem;
+            }
+
+            h2 {
+                font-size: 1.2rem;
+            }
+
+            .container {
+                padding: 0 8px;
+            }
+        }
     </style>
     
     <!-- Favicon -->
@@ -243,5 +375,80 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Copy to clipboard functionality -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add copy buttons to all pre elements
+            const preElements = document.querySelectorAll('pre');
+            
+            preElements.forEach(function(pre) {
+                // Skip if it already has a copy button
+                if (pre.querySelector('.copy-btn')) return;
+                
+                // Create copy button
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-btn';
+                copyBtn.innerHTML = '📋 Copy';
+                copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+                
+                // Wrap pre in container if not already wrapped
+                if (!pre.parentElement.classList.contains('code-container')) {
+                    const container = document.createElement('div');
+                    container.className = 'code-container';
+                    pre.parentNode.insertBefore(container, pre);
+                    container.appendChild(pre);
+                }
+                
+                // Add button to pre element
+                pre.appendChild(copyBtn);
+                
+                // Copy functionality
+                copyBtn.addEventListener('click', function() {
+                    const code = pre.querySelector('code');
+                    const textToCopy = code ? code.textContent : pre.textContent;
+                    
+                    // Clean up the text (remove button text)
+                    const cleanText = textToCopy.replace('📋 Copy', '').replace('✅ Copied!', '').trim();
+                    
+                    navigator.clipboard.writeText(cleanText).then(function() {
+                        // Success feedback
+                        copyBtn.innerHTML = '✅ Copied!';
+                        copyBtn.classList.add('copied');
+                        
+                        // Reset after 2 seconds
+                        setTimeout(function() {
+                            copyBtn.innerHTML = '📋 Copy';
+                            copyBtn.classList.remove('copied');
+                        }, 2000);
+                    }).catch(function(err) {
+                        // Fallback for older browsers
+                        const textArea = document.createElement('textarea');
+                        textArea.value = cleanText;
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        
+                        try {
+                            document.execCommand('copy');
+                            copyBtn.innerHTML = '✅ Copied!';
+                            copyBtn.classList.add('copied');
+                            
+                            setTimeout(function() {
+                                copyBtn.innerHTML = '📋 Copy';
+                                copyBtn.classList.remove('copied');
+                            }, 2000);
+                        } catch (err) {
+                            copyBtn.innerHTML = '❌ Failed';
+                            setTimeout(function() {
+                                copyBtn.innerHTML = '📋 Copy';
+                            }, 2000);
+                        }
+                        
+                        document.body.removeChild(textArea);
+                    });
+                });
+            });
+        });
+    </script>
 </body>
 </html>
