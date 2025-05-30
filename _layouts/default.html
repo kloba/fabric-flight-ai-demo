@@ -114,6 +114,54 @@
             border-radius: 4px;
             font-weight: 500;
             border: 1px solid rgba(16, 124, 16, 0.2);
+            position: relative;
+            display: inline-block;
+        }
+
+        /* Code blocks inside pre elements */
+        pre code {
+            display: block;
+            padding: 0;
+            background: transparent;
+            border: none;
+        }
+
+        /* Inline code copy button */
+        .code-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+
+        .code-wrapper .copy-btn {
+            position: absolute;
+            top: -0.25rem;
+            right: -0.25rem;
+            background: var(--fabric-primary);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 0.15rem 0.3rem;
+            font-size: 0.6rem;
+            cursor: pointer;
+            opacity: 0;
+            transition: all 0.2s ease;
+            z-index: 100;
+            line-height: 1;
+        }
+
+        .code-wrapper:hover .copy-btn {
+            opacity: 0.9;
+        }
+
+        .code-wrapper .copy-btn:hover {
+            opacity: 1;
+            background: var(--fabric-primary-dark);
+            transform: scale(1.1);
+        }
+
+        .code-wrapper .copy-btn.copied {
+            background: var(--fabric-success);
+            opacity: 1;
         }
 
         .step-section {
@@ -287,6 +335,13 @@
                 word-break: break-word;
             }
 
+            .code-wrapper .copy-btn {
+                font-size: 0.55rem;
+                padding: 0.1rem 0.25rem;
+                top: -0.2rem;
+                right: -0.2rem;
+            }
+
             .footer {
                 padding: 1.5rem 0;
             }
@@ -379,6 +434,47 @@
     <!-- Copy to clipboard functionality -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Function to copy text to clipboard
+            function copyToClipboard(text, button) {
+                navigator.clipboard.writeText(text).then(function() {
+                    // Success feedback
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '✓';
+                    button.classList.add('copied');
+                    
+                    // Reset after 1.5 seconds
+                    setTimeout(function() {
+                        button.innerHTML = originalText;
+                        button.classList.remove('copied');
+                    }, 1500);
+                }).catch(function(err) {
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = text;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    
+                    try {
+                        document.execCommand('copy');
+                        const originalText = button.innerHTML;
+                        button.innerHTML = '✓';
+                        button.classList.add('copied');
+                        
+                        setTimeout(function() {
+                            button.innerHTML = originalText;
+                            button.classList.remove('copied');
+                        }, 1500);
+                    } catch (err) {
+                        button.innerHTML = '✗';
+                        setTimeout(function() {
+                            button.innerHTML = '📋';
+                        }, 1500);
+                    }
+                    
+                    document.body.removeChild(textArea);
+                });
+            }
+
             // Add copy buttons to all pre elements
             const preElements = document.querySelectorAll('pre');
             
@@ -409,43 +505,42 @@
                     const textToCopy = code ? code.textContent : pre.textContent;
                     
                     // Clean up the text (remove button text)
-                    const cleanText = textToCopy.replace('📋 Copy', '').replace('✅ Copied!', '').trim();
+                    const cleanText = textToCopy.replace('📋 Copy', '').replace('✅ Copied!', '').replace('✓', '').trim();
+                    copyToClipboard(cleanText, copyBtn);
+                });
+            });
+
+            // Add copy buttons to all inline code elements
+            const codeElements = document.querySelectorAll('code:not(pre code)');
+            
+            codeElements.forEach(function(code) {
+                // Skip if it's inside a pre element or already wrapped
+                if (code.closest('pre') || code.parentElement.classList.contains('code-wrapper')) return;
+                
+                // Create wrapper for positioning
+                const wrapper = document.createElement('span');
+                wrapper.className = 'code-wrapper';
+                
+                // Replace code element with wrapper
+                code.parentNode.insertBefore(wrapper, code);
+                wrapper.appendChild(code);
+                
+                // Create copy button
+                const copyBtn = document.createElement('button');
+                copyBtn.className = 'copy-btn';
+                copyBtn.innerHTML = '📋';
+                copyBtn.setAttribute('aria-label', 'Copy code to clipboard');
+                
+                // Add button to wrapper
+                wrapper.appendChild(copyBtn);
+                
+                // Copy functionality
+                copyBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
                     
-                    navigator.clipboard.writeText(cleanText).then(function() {
-                        // Success feedback
-                        copyBtn.innerHTML = '✅ Copied!';
-                        copyBtn.classList.add('copied');
-                        
-                        // Reset after 2 seconds
-                        setTimeout(function() {
-                            copyBtn.innerHTML = '📋 Copy';
-                            copyBtn.classList.remove('copied');
-                        }, 2000);
-                    }).catch(function(err) {
-                        // Fallback for older browsers
-                        const textArea = document.createElement('textarea');
-                        textArea.value = cleanText;
-                        document.body.appendChild(textArea);
-                        textArea.select();
-                        
-                        try {
-                            document.execCommand('copy');
-                            copyBtn.innerHTML = '✅ Copied!';
-                            copyBtn.classList.add('copied');
-                            
-                            setTimeout(function() {
-                                copyBtn.innerHTML = '📋 Copy';
-                                copyBtn.classList.remove('copied');
-                            }, 2000);
-                        } catch (err) {
-                            copyBtn.innerHTML = '❌ Failed';
-                            setTimeout(function() {
-                                copyBtn.innerHTML = '📋 Copy';
-                            }, 2000);
-                        }
-                        
-                        document.body.removeChild(textArea);
-                    });
+                    const textToCopy = code.textContent.trim();
+                    copyToClipboard(textToCopy, copyBtn);
                 });
             });
         });
