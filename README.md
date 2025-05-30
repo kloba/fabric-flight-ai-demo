@@ -199,18 +199,18 @@ The Warehouse is chosen for storing processed data to facilitate efficient data 
 
 **Simple Queries:**
 
-- "What percentage of flights were delayed?"
-- "Which hour of the day has the highest number of delays?"
-- "How often do flights get delayed on each day of the week?"
-- "Show me the top 5 airports with the most delays."
-- "Which airlines have the highest average arrival delay?"
-- "What is the monthly trend of delayed flights?"
+- `What percentage of flights were delayed?`
+- `Which hour of the day has the highest number of delays?`
+- `How often do flights get delayed on each day of the week?`
+- `Show me the top 5 airports with the most delays.`
+- `Which airlines have the highest average arrival delay?`
+- `What is the monthly trend of delayed flights?`
 
 **More Complex Queries:**
 
-- "Compare delay rates between weekdays and weekends."
-- "Are longer flights more likely to be delayed?"
-- "What is the most common reason for delays among delayed flights?"
+- `Compare delay rates between weekdays and weekends.`
+- `Are longer flights more likely to be delayed?`
+- `What is the most common reason for delays among delayed flights?`
 
 ### Example Response from Data Agent:
 
