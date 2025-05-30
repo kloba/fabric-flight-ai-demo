@@ -1,0 +1,52 @@
+# Site settings
+title: "Flight Delay Prediction Lab Guide"
+description: "Microsoft Fabric AI Demo - Learn to build end-to-end flight delay prediction using Copilot and AI tools"
+url: "https://kloba.github.io"
+baseurl: "/fabric-flight-ai-demo"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+
+# Collections
+collections:
+  posts:
+    output: true
+    permalink: /:categories/:year/:month/:day/:title/
+
+# Default layouts
+defaults:
+  - scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "posts"
+    values:
+      layout: "post"
+
+# Navigation
+header_pages:
+  - index.md
+
+# GitHub Pages specific
+repository: kloba/fabric-flight-ai-demo
+github_username: kloba

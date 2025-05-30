@@ -1,5 +1,9 @@
+---
+layout: default
+title: Home
+---
 
-## Flight Delay Prediction Lab Guide (Microsoft Fabric)
+# Flight Delay Prediction Lab Guide (Microsoft Fabric)
 
 This guide provides step-by-step instructions on using Copilot and other AI tools within Microsoft Fabric to build an end-to-end flight delay prediction solution. Visitors can follow these instructions to learn how to effectively leverage AI capabilities in Microsoft Fabric.
 
@@ -117,7 +121,7 @@ Load the CSV file from Lakehouse named `flights_sample_3m.csv`
 
 2. **Remove null ARR_DELAY rows**:
 
-This step demonstrates how Copilot can be used to clean data before analysis — it is an example of what’s possible when preparing datasets for ML workflows in Fabric.
+This step demonstrates how Copilot can be used to clean data before analysis — it is an example of what's possible when preparing datasets for ML workflows in Fabric.
 
 ```plaintext
 Remove all rows where the value in the column `ARR_DELAY` is null.
