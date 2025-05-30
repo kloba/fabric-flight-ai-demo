@@ -290,9 +290,19 @@ The semantic model provides a structured layer over your data to simplify buildi
 
 ### Auto-Create Report:
 
+**Step 1: Access Auto-Create Report Option**
+
+![Create Auto Report](images/create-auto-report.png)
+
 - In the Fabric workspace, locate the **Power BI semantic model `sm-flightdelay-prediction`**
 - Click on the **More menu (…)** next to the model
 - Select **Auto-create report** — this automatically generates a suggested Power BI report with visuals based on your data model
+
+**Step 2: Review Generated Report**
+
+![Auto Report Example](images/auto-report-example.png)
+
+- The system automatically creates visualizations based on your data
 - You can edit the layout or keep the default structure
 - Click **Save** — your report will be saved in the same workspace if you have write access, or in **My Workspace** otherwise
 
