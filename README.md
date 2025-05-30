@@ -3,6 +3,8 @@
 
 This guide provides step-by-step instructions on using Copilot and other AI tools within Microsoft Fabric to build an end-to-end flight delay prediction solution. Visitors can follow these instructions to learn how to effectively leverage AI capabilities in Microsoft Fabric.
 
+**🌐 Interactive Lab Guide:** https://kloba.github.io/fabric-flight-ai-demo/
+
 ### Repository: `fabric-flight-ai-demo`
 
 ---
