@@ -1,7 +1,7 @@
 # Site settings
 title: "Flight Delay Prediction Lab Guide"
 description: "Microsoft Fabric AI Demo - Learn to build end-to-end flight delay prediction using Copilot and AI tools"
-url: "https://klioba.com"
+url: "https://kloba.github.io"
 baseurl: "/fabric-flight-ai-demo"
 
 # Build settings
