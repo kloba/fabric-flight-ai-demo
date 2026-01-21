@@ -75,6 +75,11 @@
             font-family: "SF Mono", "Monaco", "Inconsolata", "Roboto Mono", "Consolas", monospace;
             position: relative;
             overflow-x: auto;
+            cursor: pointer;
+        }
+
+        pre:hover {
+            background: linear-gradient(135deg, #f0f0f0 0%, #e8e8e8 100%);
         }
 
         .code-container {
@@ -159,6 +164,11 @@
             border: 1px solid rgba(16, 124, 16, 0.2);
             position: relative;
             display: inline-block;
+            cursor: pointer;
+        }
+
+        code:hover {
+            background-color: #e8f5e8;
         }
 
         /* Code blocks inside pre elements */
@@ -609,9 +619,16 @@
                 // Add button to pre element
                 pre.appendChild(copyBtn);
 
-                // Copy functionality
-                copyBtn.addEventListener('click', function() {
+                // Copy functionality - both button and pre element
+                function doCopyPre() {
                     copyToClipboard(cleanText, copyBtn, pre, id);
+                }
+
+                copyBtn.addEventListener('click', doCopyPre);
+                pre.addEventListener('click', function(e) {
+                    if (e.target !== copyBtn) {
+                        doCopyPre();
+                    }
                 });
             });
 
@@ -651,13 +668,15 @@
                 // Add button to wrapper
                 wrapper.appendChild(copyBtn);
 
-                // Copy functionality
-                copyBtn.addEventListener('click', function(e) {
+                // Copy functionality - both button and code element
+                function doCopy(e) {
                     e.preventDefault();
                     e.stopPropagation();
-
                     copyToClipboard(textContent, copyBtn, code, id);
-                });
+                }
+
+                copyBtn.addEventListener('click', doCopy);
+                code.addEventListener('click', doCopy);
             });
         });
     </script>
