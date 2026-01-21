@@ -346,6 +346,11 @@ This lab showcases how Microsoft Fabric Copilot helps reduce friction across the
   - Using smart narrative to describe patterns or anomalies.
   - Building new pages with AI-driven insights.
 
+**Power BI MCP (Model Context Protocol):**
+
+- Integrate AI assistants with Power BI semantic models using the [Remote MCP Server](https://learn.microsoft.com/en-us/power-bi/developer/mcp/remote-mcp-server-get-started) to enable natural language queries against your data models.
+- Explore the [Power BI Modeling MCP](https://github.com/microsoft/powerbi-modeling-mcp) GitHub repository for tools and examples on connecting AI agents to Power BI.
+
 ---
 
 I will be happy to hear your feedback or answer any questions. You can contact me via LinkedIn: [aka.ms/taras](https://aka.ms/taras).
