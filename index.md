@@ -74,6 +74,10 @@ First, you need to create a Microsoft Fabric workspace:
 
 ## Step 2: Dataflow Gen 2 – Clean & Transform
 
+> **Note:** This step can be skipped. You can now convert CSV files directly to tables using the **Load to Tables** functionality. Simply right-click on the uploaded file in your Lakehouse and select **Load to Tables > New table**.
+>
+> ![Load to Tables](images/load-to-tables.png)
+
 ### Create Dataflow:
 
 **Step 1: Create New Dataflow Gen2**
@@ -286,7 +290,7 @@ Apply preprocessing, predict `IS_DELAYED`, and print:
 ### Create Semantic Model:
 
 - From the Warehouse table `flightdelay-features`, create a semantic model
-- Name it: `sm-flightdelay-prediction`
+- Name it: `sm_flightdelay_prediction`
 
 The semantic model provides a structured layer over your data to simplify building Power BI reports. It helps streamline data access, organize fields for analysis, and enable self-service reporting experiences.
 
@@ -298,7 +302,7 @@ The semantic model provides a structured layer over your data to simplify buildi
 
 ![Create Auto Report](images/create-auto-report.png)
 
-- In the Fabric workspace, locate the **Power BI semantic model `sm-flightdelay-prediction`**
+- In the Fabric workspace, locate the **Power BI semantic model `sm_flightdelay_prediction`**
 - Click on the **More menu (…)** next to the model
 - Select **Auto-create report** — this automatically generates a suggested Power BI report with visuals based on your data model
 
