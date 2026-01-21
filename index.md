@@ -75,8 +75,6 @@ First, you need to create a Microsoft Fabric workspace:
 ## Step 2: Dataflow Gen 2 – Clean & Transform
 
 > **Note:** This step can be skipped. You can now convert CSV files directly to tables using the **Load to Tables** functionality. Simply right-click on the uploaded file in your Lakehouse and select **Load to Tables > New table**.
->
-> ![Load to Tables](images/load-to-tables.png)
 
 ### Create Dataflow:
 
