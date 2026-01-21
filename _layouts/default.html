@@ -127,6 +127,29 @@
             border-color: #6c757d;
         }
 
+        /* Reset progress button */
+        .reset-progress-btn {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            background: var(--fabric-gray-200);
+            color: var(--fabric-gray-900);
+            border: 1px solid var(--fabric-gray-200);
+            border-radius: 4px;
+            padding: 0.4rem 0.8rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            z-index: 1000;
+        }
+
+        .reset-progress-btn:hover {
+            opacity: 1;
+            background: var(--fabric-primary);
+            color: white;
+        }
+
         code {
             background-color: var(--fabric-light-green);
             color: var(--fabric-primary-dark);
@@ -537,6 +560,19 @@
 
             // Get previously copied items
             const copiedItems = getCopiedItems();
+
+            // Add reset button if there are copied items
+            if (copiedItems.length > 0) {
+                const resetBtn = document.createElement('button');
+                resetBtn.className = 'reset-progress-btn';
+                resetBtn.innerHTML = 'Reset Progress (' + copiedItems.length + ')';
+                resetBtn.setAttribute('aria-label', 'Reset copied items tracking');
+                resetBtn.addEventListener('click', function() {
+                    sessionStorage.removeItem(COPIED_STORAGE_KEY);
+                    location.reload();
+                });
+                document.body.appendChild(resetBtn);
+            }
 
             // Add copy buttons to all pre elements
             const preElements = document.querySelectorAll('pre');
